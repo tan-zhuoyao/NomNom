@@ -1,6 +1,24 @@
 import express from 'express';
+import * as pg from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
+
+const { Pool } = pg.default;
+const dbConfig = {
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
+};
+const db = new Pool(dbConfig);
+
+// testing connection
+db.query('SELECT * FROM reviews', (err, res) => {
+  if (err) {
+    console.error(err);
+  } else {
+    console.log(res.rows);
+  }
+});
 
 
 const app = express();
