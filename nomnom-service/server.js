@@ -21,9 +21,28 @@ const db = new Pool(dbConfig);
 // });
 
 const filterByUserId = async (userId) => {
-  const getReviews = `SELECT * FROM reviews LEFT JOIN pictures p on reviews.post_id = p.post_id WHERE user_id='${userId}'`;
+  const getReviews = `SELECT reviews.post_id, user_id, restaurant, review, url FROM reviews LEFT JOIN pictures p on reviews.post_id = p.post_id WHERE user_id='${userId}'`;
   const res = await db.query(getReviews);
   return res.rows;
+}
+
+const combine = (res) => {
+  let out = {};
+  for (let i = 0; i < res.length; i++) {
+    const data = res[i];
+    const {post_id, user_id, restaurant, review, url } = data;
+    if (!out[post_id]) {
+      out[data.post_id] = {
+        user_id,
+        restaurant,
+        review,
+        url: url ? [url] : null
+      }
+    } else {
+      out[post_id].url.push(data.url);
+    }
+  }
+  return out;
 }
 
 const app = express();
@@ -40,7 +59,8 @@ app.get('/data/:userId', (req, res) => {
     res.status(400).send();
   }
   filterByUserId(userId).then(response => {
-    res.send(response);
+    const processedRes = combine(response);
+    res.send(processedRes);
   });
 });
 
