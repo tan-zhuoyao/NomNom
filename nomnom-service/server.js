@@ -21,47 +21,57 @@ const db = new Pool(dbConfig);
 // });
 
 const filterByUserId = async (userId) => {
-  const getReviews = `SELECT reviews.post_id, user_id, restaurant, review, url FROM reviews LEFT JOIN pictures p on reviews.post_id = p.post_id WHERE user_id='${userId}'`;
-  const res = await db.query(getReviews);
+  const sqlQuery = `SELECT * FROM reviews WHERE user_id='${userId}'`;
+  const res = await db.query(sqlQuery);
   return res.rows;
 }
 
-const combine = (res) => {
-  let out = {};
-  for (let i = 0; i < res.length; i++) {
-    const data = res[i];
-    const {post_id, user_id, restaurant, review, url } = data;
-    if (!out[post_id]) {
-      out[data.post_id] = {
-        user_id,
-        restaurant,
-        review,
-        url: url ? [url] : null
-      }
-    } else {
-      out[post_id].url.push(data.url);
-    }
-  }
-  return out;
+const addReview = async (userId, restaurant, review) => {
+  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review) VALUES ('${userId}', '${restaurant}', '${review}')`;
+  const res = await db.query(sqlQuery);
+  return res.rows;
+}
+
+const addReviewWithPictures = async (userId, restaurant, review, url) => {
+  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, url) VALUES ('${userId}', '${restaurant}', '${review}', ARRAY['${url.join("','")}'])`;
+  const res = await db.query(sqlQuery);
+  return res.rows;
 }
 
 const app = express();
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello from nomnom-service!');
 });
 
-
 // get nomnom posts filtered by userId
 app.get('/data/:userId', (req, res) => {
   const { userId } = req.params;
   if (!userId) {
-    res.status(400).send();
+    res.status(400).send("invalid parameters");
   }
   filterByUserId(userId).then(response => {
-    const processedRes = combine(response);
-    res.send(processedRes);
+    res.send(response);
   });
+});
+
+// update review table on a new posting
+app.post('/post', (req, res) => {
+  const { userId, restaurant, review, url } = req.body;
+  if (!userId || !restaurant || !review) {
+    res.status(400).send("invalid parameters");
+  } else {
+    if (url) {
+      addReviewWithPictures(userId, restaurant, review, url).then(response => {
+        res.send("posted successfully");
+      });
+    } else {
+      addReview(userId, restaurant, review).then(response => {
+        res.send("posted successfully");
+      });
+    }
+  }
 });
 
 
