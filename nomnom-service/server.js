@@ -4,12 +4,23 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const { Pool } = pg.default;
-const dbConfig = {
+// For localhost
+const localDbConfig = {
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   port: process.env.DB_PORT
 };
-const db = new Pool(dbConfig);
+
+// For AWS
+const awsDbConfig = {
+  host: process.env.AWS_HOST,
+  database: process.env.AWS_NAME,
+  port: process.env.AWS_PORT,
+  user: process.env.AWS_USER,
+  password: process.env.AWS_PW
+};
+
+const db = (process.env.ENV === 'localhost') ? new Pool(localDbConfig) : new Pool(awsDbConfig);
 
 // just for testing connection
 // db.query('SELECT * FROM reviews', (err, res) => {
