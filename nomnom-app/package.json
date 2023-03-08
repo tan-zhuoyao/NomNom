@@ -10,6 +10,7 @@
     "axios": "^0.18.0",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
+    "dotenv": "^16.0.3",
     "history": "4.7.2",
     "perfect-scrollbar": "1.4.0",
     "prettier": "1.16.4",
@@ -59,6 +60,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {}
+  ]
 }

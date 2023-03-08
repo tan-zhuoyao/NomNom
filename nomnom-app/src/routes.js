@@ -22,6 +22,7 @@ import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.jsx";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
+import LandingPage from "./views/Pages/LandingPage";
 
 const dashboardRoutes = [
   {
@@ -99,6 +100,13 @@ const dashboardRoutes = [
     name: "Register Page",
     icon: Register,
     component: RegisterPage,
+    layout: "/auth"
+  },
+  {
+    path: "/landing-page",
+    name: "Landing Page",
+    icon: Register,
+    component: LandingPage,
     layout: "/auth"
   }
 ];
