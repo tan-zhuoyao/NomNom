@@ -48,7 +48,7 @@ const addReview = async (userId, restaurant, review) => {
 }
 
 const addReviewWithPictures = async (userId, restaurant, review, url) => {
-  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, url) VALUES ('${userId}', '${restaurant}', '${review}', ARRAY['${url.join("','")}'])`;
+  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, url) VALUES ('${userId}', '${restaurant}', '${review}', '${url}')`;
   const res = await db.query(sqlQuery);
   return res.rows;
 }
@@ -79,7 +79,7 @@ const uploadToS3Bucket = async (fileName, selectedFile, fileType) => {
 const app = express();
 app.use(express.json());
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200
 }
