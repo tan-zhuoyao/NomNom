@@ -1,6 +1,10 @@
 import express from 'express';
 import * as pg from 'pg';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
+import AWS from 'aws-sdk';
+import cors from 'cors';
+
 dotenv.config();
 
 const { Pool } = pg.default;
@@ -44,13 +48,42 @@ const addReview = async (userId, restaurant, review) => {
 }
 
 const addReviewWithPictures = async (userId, restaurant, review, url) => {
-  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, url) VALUES ('${userId}', '${restaurant}', '${review}', ARRAY['${url.join("','")}'])`;
+  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, url) VALUES ('${userId}', '${restaurant}', '${review}', '${url}')`;
   const res = await db.query(sqlQuery);
   return res.rows;
 }
 
+const uploadToS3Bucket = async (fileName, selectedFile, fileType) => {
+  const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+  });
+
+  const stored = await s3.upload({
+    Bucket: 'nomnom-store',
+    Key: fileName,
+    Body: selectedFile,
+    ContentType: fileType,
+    ACL: 'public-read'
+  }, (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(data);
+    }
+  }).promise();
+  return stored;
+};
+
 const app = express();
 app.use(express.json());
+const corsOptions ={
+    origin:'*', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200
+}
+app.use(cors(corsOptions));
 
 app.get('/', (req, res) => {
   res.send('Hello from nomnom-service!');
@@ -84,6 +117,22 @@ app.post('/post', (req, res) => {
     }
   }
 });
+
+// key - takes in the file name
+app.post('/upload/:key', bodyParser.raw({ type: ['image/jpeg', 'image/png'], limit: '5mb' }),
+  (req, res) => { 
+    const { key } = req.params;
+    const type = req.headers['content-type'];
+    const body = req.body;
+    uploadToS3Bucket(key, body, type).then(stored => {
+      const url = stored.Location;
+      if (!url) {
+        res.status(400).send("bad request");
+      } else {
+        res.status(200).send(url);
+      }
+    });
+  });
 
 
 const port = process.env.PORT || 3000;
