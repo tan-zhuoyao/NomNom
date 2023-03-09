@@ -1,9 +1,9 @@
 import './Home.css';
 import { useState, useEffect } from 'react';
-import { Row, Col, Container } from 'react-bootstrap';
+import { Container, Button, Modal } from 'react-bootstrap';
 
-import Sidebar from '../components/Sidebar';
 import Review from '../components/Review';
+import Upload from '../components/Upload';
 
 function Home() {
   const userId = "poopbloop" //change later
@@ -28,17 +28,15 @@ function Home() {
   )
 
   return (
-    <Container fluid>
-      <Row>
-        <Col md={3}>
-          <Sidebar />
-        </Col>
-        <Col md={9}>
-          <Container className='feed-container'>
-            {reviewList}
-          </Container>
-        </Col>
-      </Row>
+
+    <Container className='feed-container'>
+      <Upload userId={userId}/>
+      
+      {reviewList}
+      {reviewList}
+      {reviewList}
+      {reviewList}
+      {reviewList}
     </Container>
 
   );
