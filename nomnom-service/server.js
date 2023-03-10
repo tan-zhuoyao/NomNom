@@ -53,6 +53,19 @@ const addReviewWithPictures = async (userId, restaurant, review, url) => {
   return res.rows;
 }
 
+const editReview = async (postId, updatedReview) => {
+  const sqlQuery = `UPDATE reviews SET review = '${updatedReview}' WHERE post_id = ${postId}`;
+  const res = await db.query(sqlQuery);
+  return res.rows;
+}
+
+const deleteReview = async (postId) => {
+  const sqlQuery = `DELETE FROM reviews WHERE post_id = ${postId}`;
+  const res = await db.query(sqlQuery);
+  console.log(res);
+  return res.rows;
+}
+
 const uploadToS3Bucket = async (fileName, selectedFile, fileType) => {
   const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -133,6 +146,20 @@ app.post('/upload/:key', bodyParser.raw({ type: ['image/jpeg', 'image/png'], lim
       }
     });
   });
+
+  app.post('/edit', (req, res) => {
+    const { postId, updatedReview } = req.body;
+    editReview(postId, updatedReview).then(response => {
+      res.status(200).send();
+    })
+  })
+
+  app.post('/delete', (req, res) => {
+    const { postId }= req.body;
+    deleteReview(postId).then(response => {
+      res.status(200).send();
+    })
+  })
 
 
 const port = process.env.PORT || 3000;
