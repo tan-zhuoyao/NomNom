@@ -31,11 +31,6 @@ function Home() {
 
     <Container className='feed-container'>
       <Upload userId={userId}/>
-      
-      {reviewList}
-      {reviewList}
-      {reviewList}
-      {reviewList}
       {reviewList}
     </Container>
 

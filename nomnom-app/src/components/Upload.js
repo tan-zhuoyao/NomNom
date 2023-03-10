@@ -1,7 +1,8 @@
+import './Upload.css';
 import React, { useState } from 'react';
 import { Button, Container, Modal, Form } from 'react-bootstrap';
 
-const axios = require('axios');
+import axios from 'axios';
 
 const Upload = (props) => {
   const { userId } = props;
@@ -46,9 +47,14 @@ const Upload = (props) => {
     });
   }
 
-  const handleUpload = () => {
+  const handleUpload = (e) => {
+    e.preventDefault()
     if (!userId || !restaurant || !review) return;
     selectedFile ? uploadWithPic() : uploadWithoutPic();
+    setRestaurant(null);
+    setReview(null);
+    setSelectedFile(null);
+    handleClose();
   };
 
   const [showModal, setShow] = useState(false);
@@ -69,35 +75,36 @@ const Upload = (props) => {
     //   <input type="file" onChange={handleFileInput} />
     //   <button onClick={handleUpload}>Upload</button>
     // </div>
-    
-    <Container>
-      <Button className='upload-button' variant="primary" onClick={handleShow}>
+
+    <div className='upload-container'>
+      <Button className='upload-button' variant='outline-secondary' onClick={handleShow}>
         Upload your review
       </Button>
 
-       <Modal show={showModal} onHide={handleClose}>
+      <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Upload review</Modal.Title>
+          <Modal.Title>Upload your review</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleUpload}>
 
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Restaurant Name</Form.Label>
+              <Form.Control as="textarea" rows={1} onChange={e => setRestaurant(e.target.value)} />
             </Form.Group>
 
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Review</Form.Label>
+              <Form.Control as="textarea" rows={3} onChange={e => setReview(e.target.value)} />
             </Form.Group>
 
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check type="checkbox" label="Check me out" />
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Image</Form.Label>
+              <Form.Control type="file" onChange={handleFileInput} />
             </Form.Group>
 
             <Button variant="primary" type="submit">
-              Submit
+              Upload review
             </Button>
 
           </Form>
@@ -105,8 +112,7 @@ const Upload = (props) => {
       </Modal>
 
 
-    </Container>
-
+    </div>
   );
 };
 

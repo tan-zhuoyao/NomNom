@@ -1,0 +1,13 @@
+.upload-container {
+  max-width: 600px; /* Add max-width property */
+  margin-left: auto; /* Center the container horizontally */
+  margin-right: auto;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.upload-button {
+  width: 100%;
+  color: aliceblue;
+}

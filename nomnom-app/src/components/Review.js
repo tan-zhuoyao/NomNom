@@ -14,7 +14,7 @@ function Review(props) {
 
         
         <Card.Text className='post-review'>{review}</Card.Text>
-        <Card.Img className='post-image' src={url ? url[0] : url}/>
+        <Card.Img className='post-image' src={url}/>
       </Card.Body>
     </Card>
   );
