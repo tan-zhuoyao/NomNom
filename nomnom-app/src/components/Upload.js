@@ -48,7 +48,7 @@ const Upload = (props) => {
   }
 
   const handleUpload = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!userId || !restaurant || !review) return;
     selectedFile ? uploadWithPic() : uploadWithoutPic();
     setRestaurant(null);

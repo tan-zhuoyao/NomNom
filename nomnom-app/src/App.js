@@ -1,26 +1,19 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './views/Home';
+import HomeLayout from './views/HomeLayout';
 import Sidebar from './components/Sidebar';
 import { Container } from 'react-bootstrap';
+import Header from "./components/Header";
+import LandingView from './views/LandingView';
 
 function App() {
   return (
-    <div className='App'>
-      <div className='App-header'>Nomnom</div>
-      <Sidebar/>
-      <div className='App-main'>
-        <Container>
-          <Router>
-            <Routes>
-              <Route path="/" element={<Home/>}/>
-            </Routes>
-          </Router>
-        </Container>
-      </div>
-      <div className='App-footer'>Footer</div>
-    </div>
-
+    <Router>
+      <Routes>
+        <Route path="/homelayout" element={<HomeLayout/>}/>
+        <Route path="/" element={<LandingView/>}/>
+      </Routes>
+    </Router>
   );
 }
 
