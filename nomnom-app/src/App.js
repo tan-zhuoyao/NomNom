@@ -10,8 +10,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/homelayout" element={<HomeLayout/>}/>
-        <Route path="/" element={<LandingView/>}/>
+        <Route path="/" element={<LandingView />}></Route>
+        <Route path="/home" element={<HomeLayout/>}></Route>
       </Routes>
     </Router>
   );
