@@ -41,6 +41,12 @@ const filterByUserId = async (userId) => {
   return res.rows;
 }
 
+const filterByRestaurant = async (restaurant) => {
+  const sqlQuery = `SELECT * FROM reviews WHERE restaurant ilike '%${restaurant}%'`;
+  const res = await db.query(sqlQuery);
+  return res.rows;
+}
+
 const addReview = async (userId, restaurant, review) => {
   const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review) VALUES ('${userId}', '${restaurant}', '${review}')`;
   const res = await db.query(sqlQuery);
@@ -111,6 +117,16 @@ app.get('/data/:userId', (req, res) => {
   filterByUserId(userId).then(response => {
     res.send(response);
   });
+});
+
+app.get('/restaurant/:restaurant', (req, res) => {
+  const { restaurant } = req.params;
+  if (!restaurant) {
+    res.status(400).send("invalid parameters");
+  }
+  filterByRestaurant(restaurant).then(response => {
+    res.send(response);
+  })
 });
 
 // update review table on a new posting
