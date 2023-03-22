@@ -2,7 +2,7 @@ import express from 'express';
 import * as pg from 'pg';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-import AWS from 'aws-sdk';
+import { S3Client } from "@aws-sdk/client-s3";
 import cors from 'cors';
 
 dotenv.config();
@@ -47,14 +47,14 @@ const filterByRestaurant = async (restaurant) => {
   return res.rows;
 }
 
-const addReview = async (userId, restaurant, review) => {
-  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review) VALUES ('${userId}', '${restaurant}', '${review}')`;
+const addReview = async (userId, restaurant, review, rating) => {
+  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review) VALUES ('${userId}', '${restaurant}', '${review}', ${rating})`;
   const res = await db.query(sqlQuery);
   return res.rows;
 }
 
-const addReviewWithPictures = async (userId, restaurant, review, url) => {
-  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, url) VALUES ('${userId}', '${restaurant}', '${review}', '${url}')`;
+const addReviewWithPictures = async (userId, restaurant, review, rating, url) => {
+  const sqlQuery = `INSERT INTO reviews(user_id, restaurant, review, rating, url) VALUES ('${userId}', '${restaurant}', '${review}', ${rating},'${url}')`;
   const res = await db.query(sqlQuery);
   return res.rows;
 }
@@ -73,13 +73,13 @@ const deleteReview = async (postId) => {
 }
 
 const uploadToS3Bucket = async (fileName, selectedFile, fileType) => {
-  const s3 = new AWS.S3({
+  const client = new S3Client({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.AWS_REGION
   });
 
-  const stored = await s3.upload({
+  const stored = await client.send({
     Bucket: 'nomnom-store',
     Key: fileName,
     Body: selectedFile,
@@ -131,16 +131,16 @@ app.get('/restaurant/:restaurant', (req, res) => {
 
 // update review table on a new posting
 app.post('/post', (req, res) => {
-  const { userId, restaurant, review, url } = req.body;
-  if (!userId || !restaurant || !review) {
+  const { userId, restaurant, review, rating, url } = req.body;
+  if (!userId || !restaurant || !review || !rating) {
     res.status(400).send("invalid parameters");
   } else {
     if (url) {
-      addReviewWithPictures(userId, restaurant, review, url).then(response => {
+      addReviewWithPictures(userId, restaurant, review, rating, url).then(response => {
         res.send("posted successfully");
       });
     } else {
-      addReview(userId, restaurant, review).then(response => {
+      addReview(userId, restaurant, review, rating).then(response => {
         res.send("posted successfully");
       });
     }
