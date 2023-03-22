@@ -6,14 +6,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { Amplify } from 'aws-amplify';
 import config from './aws-exports';
-import { AmplifyProvider } from '@aws-amplify/ui-react';
+import { AmplifyProvider, Authenticator } from '@aws-amplify/ui-react';
 
 Amplify.configure(config);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AmplifyProvider>
-    <App />
+    <Authenticator.Provider>
+      <App />
+    </Authenticator.Provider>
   </AmplifyProvider>
 );
 
