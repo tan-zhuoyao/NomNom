@@ -23,7 +23,7 @@ function HomeLayout({ user }) {
 
   return (
     <div className="home-main">
-      <Navbar className="navbar-colour" expand="lg" setMode={setMode}>
+      <Navbar className="navbar-colour" expand="lg">
       <Container>
         <Navbar.Brand style={{color:"white"}} href="#home">
           NomNom

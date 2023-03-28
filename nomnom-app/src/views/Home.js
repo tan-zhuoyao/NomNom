@@ -24,11 +24,13 @@ function Home() {
   const [reviews, setReviews] = useState([]);
   
   useEffect(() => {
+    if (username === "") return;
     fetch(backendUrl + '/data/' + username)
       .then(response => {
         return response.json()})
       .then(data => {
         setReviews(data)});
+    // eslint-disable-next-line
   }, [username]);
 
   const reviewList = reviews.map((r) => 

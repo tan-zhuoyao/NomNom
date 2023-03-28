@@ -1,6 +1,6 @@
 import './Upload.css';
 import React, { useState } from 'react';
-import { Button, Container, Modal, Form } from 'react-bootstrap';
+import { Button, Modal, Form } from 'react-bootstrap';
 
 import axios from 'axios';
 
@@ -28,7 +28,7 @@ const Upload = (props) => {
       console.log(response);
       const url = response.data;
       axios.post(backendUrl + '/post', {
-        username,
+        userId: username,
         restaurant,
         review,
         rating,
@@ -41,7 +41,7 @@ const Upload = (props) => {
 
   const uploadWithoutPic = () => {
     axios.post(backendUrl + '/post', {
-      username,
+      userId: username,
       restaurant,
       review,
       rating
