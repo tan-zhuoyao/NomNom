@@ -3,7 +3,7 @@
     height: 100vh;
   
     display: grid;
-    grid-template: 60px 1fr 30px / 240px 1fr;
+    grid-template: 1fr 30px / 240px 1fr;
   
     /* gap: 5px; */
   }
@@ -19,9 +19,25 @@
     background-color: #f7f7f7;
     grid-column: 2 / 2;
   }
-  
-  .HomeLayout-footer {
-    border: 1px solid black;
-    grid-column: 1 / 3;
-    text-align: center;
+
+  .home-main {
+    min-height: 100vh;
+    /* display: flex;
+    align-items: center; */
+    background-image: url("../assets/home.png");
+    background-position: center;
+    background-size: cover;
+  }
+
+  .navbar-colour {
+    background-color: #59381D;
+  }
+
+  .rightmost-nav-link {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .navlink-colour {
+    color: white;
   }

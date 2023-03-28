@@ -21,6 +21,7 @@ function Search() {
         //console.log(data)
         setReviews(data)
       });
+      // eslint-disable-next-line
   }, [restaurant]);
 
   const reviewList = reviews.map((r) =>
