@@ -1,36 +1,46 @@
 import './Home.css';
 import { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
+import { Auth } from 'aws-amplify';
 
 import Review from '../components/Review';
 import Upload from '../components/Upload';
 
 function Home() {
-  const userId = "poopbloop" //change later
+  const [username, setUsername] = useState('');
+  
+  useEffect(() => {
+    // fetch the current user's username using the Auth object
+    Auth.currentUserInfo()
+      .then(user => {
+        setUsername(user.username);
+      })
+      .catch(err => console.log(err));
+  }, []);
+
+  // const userId = "poopbloop" //change later
   const backendUrl = process.env.REACT_APP_SERVER_URL || 'http://localhost:8080'
   
   const [reviews, setReviews] = useState([]);
   
   useEffect(() => {
-    fetch(backendUrl + '/data/' + userId)
+    fetch(backendUrl + '/data/' + username)
       .then(response => {
-        // console.log(response)
         return response.json()})
       .then(data => {
-        //console.log(data)
         setReviews(data)});
-  }, [backendUrl]);
+  }, [username]);
 
   const reviewList = reviews.map((r) => 
     // <Container className='post-container'>
-      <Review key={r.post_id} userId={r.user_id} restaurant={r.restaurant} review={r.review} url={r.url}/>
+      <Review key={r.post_id} username={r.user_id} restaurant={r.restaurant} review={r.review} url={r.url}/>
     // </Container>
   )
 
   return (
 
     <Container className='feed-container'>
-      <Upload userId={userId}/>
+      <Upload username={username}/>
       {reviewList}
     </Container>
 

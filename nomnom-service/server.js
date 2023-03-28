@@ -97,12 +97,16 @@ const uploadToS3Bucket = async (fileName, selectedFile, fileType) => {
 
 const app = express();
 app.use(express.json());
-const corsOptions ={
-    origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
-app.use(cors(corsOptions));
+
+// const corsOptions ={
+//     origin:'*', 
+//     credentials:true,            //access-control-allow-credentials:true
+//     methods: ['GET', 'POST'],
+//     optionSuccessStatus:200
+// }
+// app.use(cors(corsOptions));
+
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello from nomnom-service!');

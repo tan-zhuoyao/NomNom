@@ -5,10 +5,11 @@ import { Button, Container, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
 
 const Upload = (props) => {
-  const { userId } = props;
+  const { username } = props;
 
   const [restaurant, setRestaurant] = useState(null);
   const [review, setReview] = useState(null);
+  const [rating, setRating] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
 
   const handleFileInput = (event) => {
@@ -27,9 +28,10 @@ const Upload = (props) => {
       console.log(response);
       const url = response.data;
       axios.post(backendUrl + '/post', {
-        userId,
+        username,
         restaurant,
         review,
+        rating,
         url
       }).then(response => {
         console.log(response);
@@ -39,9 +41,10 @@ const Upload = (props) => {
 
   const uploadWithoutPic = () => {
     axios.post(backendUrl + '/post', {
-      userId,
+      username,
       restaurant,
-      review
+      review,
+      rating
     }).then(response => {
       console.log(response);
     });
@@ -49,10 +52,11 @@ const Upload = (props) => {
 
   const handleUpload = (e) => {
     e.preventDefault();
-    if (!userId || !restaurant || !review) return;
+    if (!username || !restaurant || !review) return;
     selectedFile ? uploadWithPic() : uploadWithoutPic();
     setRestaurant(null);
     setReview(null);
+    setRating(null);
     setSelectedFile(null);
     handleClose();
   };
@@ -63,19 +67,6 @@ const Upload = (props) => {
   const handleShow = () => setShow(true);
 
   return (
-    // <div>
-    //   <h2>Upload Image</h2>
-    //   <h4>UserId</h4>
-    //   <input type="text" onChange={e => setUserId(e.target.value)} />
-    //   <h4>Restaurant</h4>
-    //   <input type="text" onChange={e => setRestaurant(e.target.value)} />
-    //   <h4>Review</h4>
-    //   <input type="text" onChange={e => setReview(e.target.value)} />
-    //   <br/>
-    //   <input type="file" onChange={handleFileInput} />
-    //   <button onClick={handleUpload}>Upload</button>
-    // </div>
-
     <div className='upload-container'>
       <Button className='upload-button' variant='outline-secondary' onClick={handleShow}>
         Upload your review
@@ -96,6 +87,11 @@ const Upload = (props) => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
               <Form.Label>Review</Form.Label>
               <Form.Control as="textarea" rows={3} onChange={e => setReview(e.target.value)} />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+              <Form.Label>Rating (out of 5)</Form.Label>
+              <Form.Control as="textarea" rows={1} onChange={e => setRating(e.target.value)} />
             </Form.Group>
 
             <Form.Group controlId="formFile" className="mb-3">
