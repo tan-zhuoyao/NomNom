@@ -29,13 +29,14 @@ function Home() {
       .then(response => {
         return response.json()})
       .then(data => {
-        setReviews(data)});
+        setReviews(data)
+        console.log(data)});
     // eslint-disable-next-line
   }, [username]);
 
   const reviewList = reviews.map((r) => 
     // <Container className='post-container'>
-      <Review key={r.post_id} username={r.user_id} restaurant={r.restaurant} review={r.review} url={r.url}/>
+      <Review key={r.post_id} userId={r.user_id} restaurant={r.restaurant} review={r.review} rating={r.rating} time={r.time} url={r.url}/>
     // </Container>
   )
 
