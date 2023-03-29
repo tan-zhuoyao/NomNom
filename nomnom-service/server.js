@@ -35,6 +35,12 @@ const db = (process.env.ENV === 'localhost') ? new Pool(localDbConfig) : new Poo
 //   }
 // });
 
+const getAllReviews = async () => {
+  const sqlQuery = `SELECT * FROM reviews ORDER BY time DESC LIMIT 20;`;
+  const res = await db.query(sqlQuery);
+  return res.rows;
+}
+
 const filterByUserId = async (userId) => {
   const sqlQuery = `SELECT * FROM reviews WHERE user_id='${userId}'`;
   const res = await db.query(sqlQuery);
@@ -112,6 +118,12 @@ app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello from nomnom-service!');
+});
+
+app.get('/all', (req, res) => {
+  getAllReviews().then(response => {
+    res.send(response);
+  });
 });
 
 // get nomnom posts filtered by userId
