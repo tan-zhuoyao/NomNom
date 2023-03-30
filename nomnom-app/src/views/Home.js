@@ -20,7 +20,7 @@ function Home() {
         //console.log(data)
         setReviews(data)});
   }, [backendUrl]);
-
+  
   const reviewList = reviews.map((r) => 
     // <Container className='post-container'>
       <Review key={r.post_id} userId={r.user_id} restaurant={r.restaurant} review={r.review} url={r.url}/>
