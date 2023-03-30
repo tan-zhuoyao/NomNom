@@ -2,7 +2,7 @@ import express from 'express';
 import * as pg from 'pg';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
-import { S3Client } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import cors from 'cors';
 
 dotenv.config();
@@ -34,6 +34,12 @@ const db = (process.env.ENV === 'localhost') ? new Pool(localDbConfig) : new Poo
 //     console.log(res.rows);
 //   }
 // });
+
+const getAllReviews = async () => {
+  const sqlQuery = `SELECT * FROM reviews ORDER BY time DESC LIMIT 20;`;
+  const res = await db.query(sqlQuery);
+  return res.rows;
+}
 
 const filterByUserId = async (userId) => {
   const sqlQuery = `SELECT * FROM reviews WHERE user_id='${userId}'`;
@@ -68,44 +74,56 @@ const editReview = async (postId, updatedReview) => {
 const deleteReview = async (postId) => {
   const sqlQuery = `DELETE FROM reviews WHERE post_id = ${postId}`;
   const res = await db.query(sqlQuery);
-  console.log(res);
   return res.rows;
 }
 
 const uploadToS3Bucket = async (fileName, selectedFile, fileType) => {
   const client = new S3Client({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    },
+    region: process.env.AWS_REGION,
+    signatureVersion: 'v4',
   });
 
-  const stored = await client.send({
-    Bucket: 'nomnom-store',
+  const command = new PutObjectCommand({
+    Bucket: "nomnom-store",
     Key: fileName,
     Body: selectedFile,
     ContentType: fileType,
     ACL: 'public-read'
-  }, (err, data) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(data);
-    }
-  }).promise();
-  return stored;
+  });
+
+  try {
+    const response = await client.send(command);
+    return response;
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 const app = express();
 app.use(express.json());
-const corsOptions ={
-    origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200
-}
-app.use(cors(corsOptions));
+
+// const corsOptions ={
+//     origin:'*', 
+//     credentials:true,            //access-control-allow-credentials:true
+//     methods: ['GET', 'POST'],
+//     optionSuccessStatus:200
+// }
+// app.use(cors(corsOptions));
+
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.send('Hello from nomnom-service!');
+});
+
+app.get('/all', (req, res) => {
+  getAllReviews().then(response => {
+    res.send(response);
+  });
 });
 
 // get nomnom posts filtered by userId
@@ -154,11 +172,11 @@ app.post('/upload/:key', bodyParser.raw({ type: ['image/jpeg', 'image/png'], lim
     const type = req.headers['content-type'];
     const body = req.body;
     uploadToS3Bucket(key, body, type).then(stored => {
-      const url = stored.Location;
-      if (!url) {
-        res.status(400).send("bad request");
+      const statusCode = stored['$metadata'].httpStatusCode;
+      if (statusCode ===  200) {
+        res.status(200).send(process.env.S3_BUCKET_URL + key);
       } else {
-        res.status(200).send(url);
+        res.status(400).send("bad request");
       }
     });
   });

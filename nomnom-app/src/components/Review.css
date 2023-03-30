@@ -10,30 +10,41 @@
   width: 100%;
 }
 
-/*
-.post-header {
-  margin-bottom: 16px;
+#post-restaurant {
+  font-weight: 700;
+  color: "red";
 }
 
-.post-username {
-  font-weight: bold;
-  margin-bottom: 4px;
+#post-image {
+  margin-bottom: 10px;
 }
 
-.post-timestamp {
-  color: #666;
-  font-size: 12px;
+#post-username {
+  margin-bottom: 10px;
 }
 
-.post-message {
-  margin-bottom: 16px;
+#post-date {
+  text-align: right;
+  font-size: 14px;
 }
 
-.post-image {
-  width: 100%;
-  height: auto;
-  margin-bottom: 16px;
-  max-width: 100%; 
+#post-review {
+  font-size: 20px;
 }
 
-*/
+#star {
+  width: 20px;
+  height: 20px;
+  margin-top: -3px;
+}
+
+#rating {
+  display: inline;
+  font-size: 16px;
+}
+
+.vertical-center {
+  margin: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
