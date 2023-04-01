@@ -17,12 +17,12 @@ const LandingView = () => {
           <div className="intro-text">
             <div className='buttonContainer'>
               <a href='/home'>
-                <Button size='lg' className='landingbutton' variant='light'>
+                <Button size='lg' className='landingbutton'>
                   Login
                 </Button>
               </a>
               <a href='/home'>
-                <Button size='lg' className='landingbutton' variant='light'>
+                <Button size='lg' className='landingbutton'>
                   Signup
                 </Button>
               </a>
