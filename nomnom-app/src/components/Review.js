@@ -10,7 +10,7 @@ function Review(props) {
   const ratingComponent = (rating) => {
     let array = [];
     for (let i = 0 ; i < rating; i++) {
-      array.push(<img id='star' alt="" src="star.png"></img>)
+      array.push(<img key={i} id='star' alt="" src="star.png"></img>)
     }
     return array;
   }
