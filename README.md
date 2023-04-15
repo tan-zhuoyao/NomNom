@@ -93,7 +93,7 @@ For any enquiries or assistance on reproducing NomNom, please email tanzhuoyao@g
 
     <img width="704" alt="image17" src="https://user-images.githubusercontent.com/65531702/232207228-596503cf-b71d-468c-965e-0cdab06f8e00.png">
 
-9. Run `pm2 status` to ensure services are up and running as following: <br>
+9. Run `pm2 status` to ensure services are up and running as shown below: <br>
 
    <img width="579" alt="image19" src="https://user-images.githubusercontent.com/65531702/232207250-17dfa22c-5b2e-4017-b2ac-f1ced5dc40a7.png">
 
