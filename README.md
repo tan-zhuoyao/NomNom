@@ -30,7 +30,12 @@ For any enquiries or assistance on reproducing NomNom, please email tanzhuoyao@g
    The photo uploaded can also be found in the Amazon S3 bucket within the console:
    
    ![ScreenShot](https://user-images.githubusercontent.com/65531702/232206396-f28b8f7e-0ac8-46ad-bd74-7faa7b300d9a.png)
-   
+
+6. Click on 'Recommendations' located at the top navigation bar to view the personalized recommendations curated for you:
+
+   ![ScreenShot](https://user-images.githubusercontent.com/65531702/232229272-40b77604-a551-46ad-ae85-182b16810a34.jpg)
+
+7. Click on 'Search' located at the top navigation bar to search for specific restaurants or users.
 
 ## Steps to Setup the SaaS
 1. In  your EC2 (ubuntu) instance, run the following commands to set up the environment: <br>
