@@ -37,6 +37,9 @@ For any enquiries or assistance on reproducing NomNom, please email tanzhuoyao@g
 
 7. Click on 'Search' located at the top navigation bar to search for specific restaurants or users.
 
+   <img width="1360" alt="Screenshot 2023-04-16 at 6 14 16 PM" src="https://user-images.githubusercontent.com/65531702/232302554-1821df9a-d656-4ff2-bebd-55316f8e0d87.png">
+
+
 ## Steps to Setup the SaaS
 1. In  your EC2 (ubuntu) instance, run the following commands to set up the environment: <br>
   ```
