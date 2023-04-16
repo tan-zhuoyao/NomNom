@@ -1,7 +1,7 @@
 # NomNom - Cloud-based SaaS Recommendation Application
 NomNom is an innovative cloud-based SaaS recommendation application that revolutionises the way people discover and review restaurants in Singapore. <br>
 
-This README includes detailed steps on how to test and set up the SaaS. <br>
+This README includes detailed steps on how to set up and test the SaaS. <br>
 
 For any enquiries or assistance on reproducing NomNom, please email tanzhuoyao@gmail.com. <br>
 
